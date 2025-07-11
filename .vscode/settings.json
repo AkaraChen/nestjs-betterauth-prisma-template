@@ -1,0 +1,7 @@
+{
+    // eslint auto fix on save
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
+}
