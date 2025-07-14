@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { username } from 'better-auth/plugins';
+import { username, organization, admin, apiKey } from 'better-auth/plugins';
 import { Role } from '../../generated/prisma';
 import { UserSession } from './types/auth.types';
 
@@ -14,7 +14,7 @@ export class AuthService {
       database: prismaAdapter(this.prismaService, {
         provider: 'postgresql',
       }),
-      plugins: [username()],
+      plugins: [username(), admin(), organization(), apiKey()],
       emailAndPassword: {
         enabled: true,
         requireEmailVerification: false,

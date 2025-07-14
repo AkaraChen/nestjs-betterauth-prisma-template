@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import type { $Enums, Profile } from '../../../generated/prisma';
+import { $Enums, type Profile } from '../../../generated/prisma';
 
 export class ProfileVo implements Profile {
   @Exclude()
