@@ -15,6 +15,10 @@ export class AuthService {
         provider: 'postgresql',
       }),
       plugins: [username()],
+      emailAndPassword: {
+        enabled: true,
+        requireEmailVerification: false,
+      }
     });
   }
 

@@ -21,6 +21,7 @@ import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
         NODE_ENV: Joi.string().default('development'),
         PORT: Joi.number().default(4000),
         BETTER_AUTH_SECRET: Joi.string().required(),
+        ALLOWED_ORIGINS: Joi.string().required(),
       }),
     }),
     LoggerModule.forRootAsync({

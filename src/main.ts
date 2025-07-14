@@ -9,6 +9,7 @@ import { setupGracefulShutdown } from 'nestjs-graceful-shutdown';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
+    bodyParser: false,
   });
   setupGracefulShutdown({ app });
   app.useGlobalPipes(new ValidationPipe());
@@ -20,6 +21,10 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, document);
   SwaggerModule.setup('api', app, documentFactory, {
     jsonDocumentUrl: '/api/json',
+  });
+  app.enableCors({
+    origin: config.getOrThrow<string>('ALLOWED_ORIGINS').split(','),
+    credentials: true,
   });
   const port: number = config.get('PORT')!;
   logger.log(`Application is running on: http://localhost:${port}`);
