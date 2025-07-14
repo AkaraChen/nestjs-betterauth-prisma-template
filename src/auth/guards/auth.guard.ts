@@ -9,7 +9,6 @@ import { fromNodeHeaders } from 'better-auth/node';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { AuthService } from '../auth.service';
 import { RequestWithSession } from '../types/auth.types';
-import { PrismaService } from '../../prisma/prisma.service';
 import { Roles } from '../decorators/role.decorator';
 
 @Injectable()
@@ -17,7 +16,6 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
-    private readonly prismaService: PrismaService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -44,15 +42,7 @@ export class AuthGuard implements CanActivate {
     const roles = this.reflector.get(Roles, context.getHandler());
 
     if (roles?.length && roles.length > 0) {
-      const profile = await this.prismaService.profile.findUnique({
-        where: {
-          userId: session.user.id,
-        },
-      });
-      if (!profile) {
-        throw new UnauthorizedException();
-      }
-      if (!roles.includes(profile.role)) {
+      if (!await this.authService.hasRole(session, roles)) {
         throw new UnauthorizedException();
       }
     }
