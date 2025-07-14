@@ -1,13 +1,23 @@
-import { Module } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
-import { AuthController } from './auth.controller';
 import { PrismaService } from '../prisma/prisma.service';
-import { Reflector } from '@nestjs/core';
+import { HttpAdapterHost, Reflector } from '@nestjs/core';
+import { SkipBodyParsingMiddleware } from './middlewares/body.middleware';
 
 @Module({
-  providers: [AuthService, ConfigService, PrismaService, Reflector],
-  controllers: [AuthController],
+  providers: [AuthService, ConfigService, PrismaService, Reflector, Logger],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly adapter: HttpAdapterHost,
+    private readonly logger: Logger,
+  ) {}
+  configure(consumer: MiddlewareConsumer) {
+    this.adapter.httpAdapter.all('/api/auth/*splat', this.authService.handler);
+    this.logger.log('better-auth http handler is on');
+    consumer.apply(SkipBodyParsingMiddleware).forRoutes('*path');
+  }
+}

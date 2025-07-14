@@ -42,7 +42,7 @@ export class AuthGuard implements CanActivate {
     const roles = this.reflector.get(Roles, context.getHandler());
 
     if (roles?.length && roles.length > 0) {
-      if (!await this.authService.hasRole(session, roles)) {
+      if (!(await this.authService.hasRole(session, roles))) {
         throw new UnauthorizedException();
       }
     }
