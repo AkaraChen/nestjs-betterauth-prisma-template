@@ -4,12 +4,15 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: nestjs-app-dev
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@localhost:5432/backend
     env_file:
       - .env
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules # Prevent local node_modules from overwriting container's
     command: pnpm start:dev
+    network_mode: host
 
   db:
     image: postgres:15-alpine

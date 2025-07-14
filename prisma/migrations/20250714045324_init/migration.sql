@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('ADMIN', 'TEACHER', 'PARENT', 'INTERNAL_DEVICE');
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
 
 -- CreateTable
 CREATE TABLE "user" (
@@ -71,6 +71,7 @@ CREATE TABLE "profile" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
     "bio" TEXT,
+    "role" "Role" NOT NULL,
 
     CONSTRAINT "profile_pkey" PRIMARY KEY ("_id")
 );
