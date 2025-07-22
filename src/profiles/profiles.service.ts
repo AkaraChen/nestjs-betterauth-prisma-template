@@ -28,7 +28,6 @@ export class ProfilesService {
       create: {
         userId,
         bio,
-        role: 'USER',
       },
     });
   }
