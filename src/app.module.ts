@@ -9,6 +9,7 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { SeedingModule } from './seeding/seeding.module';
 import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
 
 @Module({
@@ -68,6 +69,7 @@ import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
     AuthModule,
     ProfilesModule,
     PrismaModule,
+    SeedingModule,
     GracefulShutdownModule.forRoot(),
   ],
   controllers: [AppController],
