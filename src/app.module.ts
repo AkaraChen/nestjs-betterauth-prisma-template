@@ -7,7 +7,6 @@ import { LoggerModule } from 'pino-nestjs';
 import { TransportTargetOptions } from 'pino';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
-import { ProfilesModule } from './profiles/profiles.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { SeedingModule } from './seeding/seeding.module';
 import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
@@ -67,7 +66,6 @@ import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
     }),
     HealthModule,
     AuthModule,
-    ProfilesModule,
     PrismaModule,
     SeedingModule,
     GracefulShutdownModule.forRoot(),

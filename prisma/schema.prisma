@@ -16,48 +16,40 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid()) @map("_id")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  username String  @unique
-  password String
-  isActive Boolean @default(true)
-
-  name          String
-  email         String
-  emailVerified Boolean
-  image         String?
-  sessions      Session[]
-  accounts      Account[]
-  profile       Profile?
-
+  id              String       @id
+  name            String
+  email           String
+  emailVerified   Boolean
+  image           String?
+  createdAt       DateTime
+  updatedAt       DateTime
+  username        String?
   displayUsername String?
-
-  banned      Boolean?
-  banReason   String?
-  banExpires  DateTime?
-  members     Member[]
-  invitations Invitation[]
-  apikeys     Apikey[]
-
-  role String?
+  role            String?
+  banned          Boolean?
+  banReason       String?
+  banExpires      DateTime?
+  sessions        Session[]
+  accounts        Account[]
+  members         Member[]
+  invitations     Invitation[]
+  apikeys         Apikey[]
 
   @@unique([email])
+  @@unique([username])
   @@map("user")
 }
 
 model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String
-  createdAt DateTime
-  updatedAt DateTime
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id                   String   @id
+  expiresAt            DateTime
+  token                String
+  createdAt            DateTime
+  updatedAt            DateTime
+  ipAddress            String?
+  userAgent            String?
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   impersonatedBy       String?
   activeOrganizationId String?
 
@@ -93,19 +85,6 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
-}
-
-model Profile {
-  id        String   @id @default(cuid()) @map("_id")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  bio String?
-
-  @@map("profile")
 }
 
 model Organization {

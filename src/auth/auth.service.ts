@@ -3,7 +3,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { username, organization, admin, apiKey } from 'better-auth/plugins';
-import { UserSession } from './types/auth.types';
 import { toNodeHandler } from 'better-auth/node';
 
 function createAuth(prismaService: PrismaService) {
@@ -15,6 +14,9 @@ function createAuth(prismaService: PrismaService) {
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: false,
+    },
+    user: {
+      modelName: 'user',
     },
   });
 }

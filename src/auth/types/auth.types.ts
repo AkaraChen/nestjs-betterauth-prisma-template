@@ -11,6 +11,6 @@ export interface RequestWithSession extends Request {
   session?: UserSession;
 }
 
-type EnhancedString = string & {}
+type EnhancedString = string & {};
 
 export type Role = 'admin' | 'user' | EnhancedString;

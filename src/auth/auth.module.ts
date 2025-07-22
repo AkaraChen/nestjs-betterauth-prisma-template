@@ -1,4 +1,10 @@
-import { Global, Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  Global,
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
