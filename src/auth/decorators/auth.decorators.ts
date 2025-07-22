@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { Role } from '../../../generated/prisma';
+import { Role } from '../types/auth.types';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';

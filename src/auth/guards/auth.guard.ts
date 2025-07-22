@@ -10,12 +10,14 @@ import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { AuthService } from '../auth.service';
 import { RequestWithSession } from '../types/auth.types';
 import { Roles } from '../decorators/role.decorator';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
+    private readonly prismaService: PrismaService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -42,7 +44,17 @@ export class AuthGuard implements CanActivate {
     const roles = this.reflector.get(Roles, context.getHandler());
 
     if (roles?.length && roles.length > 0) {
-      if (!(await this.authService.hasRole(session, roles))) {
+      const user = await this.prismaService.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+      });
+
+      if (!user || !user.role) {
+        throw new UnauthorizedException();
+      }
+      // @ts-expect-error
+      if (!roles.includes(user.role.split(','))) {
         throw new UnauthorizedException();
       }
     }

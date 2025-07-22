@@ -11,7 +11,6 @@ import { ProfilesService } from './profiles.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UserId } from '../auth/decorators/user-id.decorator';
 import { ProfileVo } from './vo/profile.vo';
-import { Role } from '../../generated/prisma';
 import { Auth } from '../auth/decorators/auth.decorators';
 import { Public } from '../auth/decorators/public.decorator';
 
@@ -27,7 +26,7 @@ export class ProfilesController {
     description: 'The user profile has been successfully returned.',
     type: ProfileVo,
   })
-  @Auth(Role.USER)
+  @Auth('user')
   findMyProfile(@UserId() userId: string) {
     return this.profilesService.findOne(userId);
   }
@@ -39,7 +38,7 @@ export class ProfilesController {
     description: 'The user profile has been successfully updated.',
     type: ProfileVo,
   })
-  @Auth(Role.USER)
+  @Auth('user')
   updateMyProfile(
     @UserId() userId: string,
     @Body() updateProfileDto: UpdateProfileDto,
