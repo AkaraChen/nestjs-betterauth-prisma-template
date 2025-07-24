@@ -11,7 +11,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules # Prevent local node_modules from overwriting container's
-    command: pnpm start:dev
+    command: ["sh", "/usr/src/app/scripts/start-dev.sh"]
     network_mode: host
 
   db:

@@ -19,6 +19,7 @@ RUN pnpm install --frozen-lockfile
 COPY tsconfig.json tsconfig.build.json nest-cli.json ./
 COPY src ./src
 COPY prisma ./prisma
+COPY scripts ./scripts
 
 # Generate Prisma client
 RUN pnpm prisma generate
@@ -40,9 +41,14 @@ COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/generated ./generated
 
+# Copy startup script
+COPY --from=builder /usr/src/app/scripts ./scripts
+RUN chmod +x ./scripts/start.sh
+
 # The default port for NestJS is 3000
 EXPOSE 3000
 
-# Run the application
+# Run the application with startup script
 ENV NODE_OPTIONS=--experimental-require-module
+ENTRYPOINT ["./scripts/start.sh"]
 CMD ["node", "dist/main.js"]
