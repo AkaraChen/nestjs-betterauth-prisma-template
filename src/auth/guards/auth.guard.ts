@@ -10,14 +10,12 @@ import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { AuthService } from '../auth.service';
 import { RequestWithSession } from '../types/auth.types';
 import { Roles } from '../decorators/role.decorator';
-import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
-    private readonly prismaService: PrismaService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -36,7 +34,9 @@ export class AuthGuard implements CanActivate {
     });
 
     if (!session) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        message: 'Session not found',
+      });
     }
 
     request.session = session;
@@ -44,19 +44,25 @@ export class AuthGuard implements CanActivate {
     const roles = this.reflector.get(Roles, context.getHandler());
 
     if (roles?.length && roles.length > 0) {
-      const user = await this.prismaService.user.findUnique({
-        where: {
-          id: session.user.id,
-        },
-      });
+      const user = session.user;
 
-      if (!user || !user.role) {
-        throw new UnauthorizedException();
+      if (!user) {
+        throw new UnauthorizedException({
+          message: 'User not found',
+        });
       }
-      // @ts-expect-error
-      if (!roles.includes(user.role.split(','))) {
-        throw new UnauthorizedException();
+      if (!user.role) {
+        throw new UnauthorizedException({
+          message: 'User role not found',
+        });
       }
+      const userRoles = user.role.split(',');
+      if (userRoles.length === 0) {
+        throw new UnauthorizedException({
+          message: 'User role not found',
+        });
+      }
+      return roles.some((role) => userRoles.includes(role));
     }
 
     return true;
